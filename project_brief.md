@@ -52,5 +52,5 @@ Every analysis in this project must answer one of these questions.
 
 2. **Which customers drive our revenue, and which valuable ones are slipping away?** Which segments hold the most revenue, and which high-value customers have stopped buying?
 
-**Champions (24% of customers) drive 69% of known-customer sales and grew 14% last year. Revenue is highly concentrated: the top 1% of customers bring in 31%, and the top 20% bring in 77%. The valuable customers slipping away are the At Risk segment: 710 customers who used to order about 5–6 times but haven’t bought in about a year. The high-value ones among them spent £935k the year before and only £184k in the last 12 months, a loss of about £751k a year.
+> **Champions (24% of customers) drive 69% of known-customer sales and grew 14% last year. Revenue is highly concentrated: the top 1% of customers bring in 31%, and the top 20% bring in 77%. The valuable customers slipping away are the At Risk segment: 710 customers who used to order about 5–6 times but haven’t bought in about a year. The high-value ones among them spent £935k the year before and only £184k in the last 12 months, a loss of about £751k a year.
 
