@@ -147,11 +147,6 @@ The raw data isn't stored in this repository because of its size.
 
 ---
 
-## How I Used AI
-I used an AI assistant to help plan the project structure, draft SQL and debug errors. I verified the results myself: row counts against the source, totals reconciled across every layer, and spot checks on the largest orders and cancellations. Two of the most important fixes (the same-day reversals and the misleading retention comparison) came from questioning results that looked wrong. I own the definitions, decisions and recommendation.
-
----
-
 ## Future Work
 - Rebuild the SQL layers in **dbt** with automated tests and lineage documentation.
 - Add **k-means clustering** to validate the RFM segments.
