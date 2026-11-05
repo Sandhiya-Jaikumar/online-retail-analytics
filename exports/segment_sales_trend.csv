@@ -1,0 +1,13 @@
+segment,is_high_value,sales_prior_12m_gbp,sales_last_12m_gbp,change_gbp
+1. Champions,true,5205722.45,5931004.99,725282.55
+1. Champions,false,42301.02,74052.02,31751
+2. Loyal,true,1084736.47,952305.54,-132430.93
+2. Loyal,false,141691.09,257566.82,115875.73
+3. New / Promising,true,22145.38,50081.56,27936.18
+3. New / Promising,false,21442.32,163933.39,142491.07
+4. At Risk,true,935382.86,184077.08,-751305.78
+4. At Risk,false,228786.64,58006.88,-170779.76
+5. Needs Attention,true,14145.18,61022.43,46877.25
+5. Needs Attention,false,17984.73,139043.93,121059.2
+6. Hibernating,true,138009.25,37833.17,-100176.08
+6. Hibernating,false,395061.46,121819.23,-273242.23
