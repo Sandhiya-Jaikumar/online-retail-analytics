@@ -100,6 +100,10 @@ The data was loaded into **Google BigQuery** and modeled in three layers with SQ
 
 - **Champions are healthy and growing:** +14% year over year among high-value Champions.
 - **Concentration risk:** top 1% of customers = 31.1% of sales; top 20% = 76.7%.
+- - **Validated with k-means clustering.** An unsupervised model, given no rules, found four natural customer groups. Five of six RFM segments map mainly to a single cluster (for example, 85% of At Risk customers fall in the "Lapsing regulars" cluster), which confirms the segmentation.
+- **"Loyal" hides an early-warning group.** About half of Loyal customers cluster with lapsing regulars: 605 customers with a median of 5 orders who haven't bought in 98 days, with £1.2M in lifetime sales.
+
+![RFM segments vs k-means clusters](images/rfm_vs_kmeans.png)
 
 ### 4) Win-Back Opportunity
 - **324 high-value At Risk customers** spent £935,383 in the previous 12 months and only £184,077 in the last 12 months.
@@ -112,6 +116,7 @@ The data was loaded into **Google BigQuery** and modeled in three layers with SQ
 
 ## Recommendations
 - **Win back high-value At Risk customers (recommended).** Estimated £94k–£281k a year (10–30% of former spend). Test first: split the 324 customers randomly into two groups of 162, contact one, and compare reorder rate and sales after 90 days.
+- - **Re-engage drifting Loyal customers early.** 605 regular customers haven't ordered in about three months. Reaching them now is cheaper than winning them back once they become At Risk.
 - **Rebuild new-customer acquisition (next priority).** A new customer is worth about £1,487 in their first year (upper estimate).
 - **Protect Champions** with account management to reduce concentration risk.
 - **Capture a customer ID on every order** to make about 13% of revenue trackable.
@@ -132,6 +137,7 @@ The full reasoning, options compared and risks are in the [one-page executive me
 | Cohort retention | BigQuery SQL | [`sql/06_cohort_retention.sql`](sql/06_cohort_retention.sql) |
 | RFM segments and opportunity sizing | BigQuery SQL | [`sql/07_rfm_segments.sql`](sql/07_rfm_segments.sql) |
 | Exports for the dashboard | BigQuery SQL | [`sql/08_exports_for_tableau.sql`](sql/08_exports_for_tableau.sql) |
+| K-means validation of RFM segments | Python (pandas, scikit-learn), Google Colab | [`notebooks/01_kmeans_segmentation.ipynb`](notebooks/01_kmeans_segmentation.ipynb) |
 | Dashboard | Tableau Public | [Live dashboard](https://public.tableau.com/app/profile/sandhiya3216/viz/OnlineRetail-CustomerRetentionRevenue/CustomerRetentionRevenue) |
 
 Each SQL file starts with a one-line note saying when to run it.
@@ -149,7 +155,6 @@ The raw data isn't stored in this repository because of its size.
 
 ## Future Work
 - Rebuild the SQL layers in **dbt** with automated tests and lineage documentation.
-- Add **k-means clustering** to validate the RFM segments.
 - Add a **monthly revenue forecast** with a backtest against held-out months.
 - Analyze the **A/B test results** once the win-back campaign runs.
 
