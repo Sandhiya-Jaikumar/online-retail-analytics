@@ -82,6 +82,11 @@ The data was loaded into **Google BigQuery** and modeled in three layers with SQ
 - **Cancellations are small once cleaned.** Product cancellations are 1.7% of gross sales. A raw view suggested 7.4%, because fee reversals and same-day reversals were mixed in.
 - **Dec 2011 is excluded from trends**, since it has only 9 days of data.
 
+- - **Next quarter: about £1.87M (range £1.76M–£1.99M).** Sales fall to roughly half the autumn level after the November peak. I backtested three methods on six held-out months (Jun–Nov 2011): "same month last year" was most accurate (6.1% average monthly error). Adjusting for recent growth made it worse (11.1%), because a spring dip didn't carry into autumn.
+- **Early check against real data:** the first 9 days of December 2011 ran 9.3% ahead of the same days in 2010 (£445k vs £407k). If December follows last year's pattern, it would land near £843k, just above the forecast range, consistent with the backtest's tendency to under-forecast. Recommendation: plan toward the high end for December.
+
+![Forecast backtest](images/forecast_backtest.png)
+
 ### 2) Customer Acquisition and Retention
 - **Retention is steady.** About 1 in 5 new customers buys in any given month after joining, with a bump at month 12 as customers return for the next holiday season.
 - **Retention did not decline.** A first comparison suggested 2011 joiners returned less often. Retesting on a cleaner season (Jun–Aug cohorts) showed month-3 retention of 26.5% (2010) vs 26.9% (2011). The first gap came from the data starting in Dec 2009.
@@ -138,6 +143,8 @@ The full reasoning, options compared and risks are in the [one-page executive me
 | RFM segments and opportunity sizing | BigQuery SQL | [`sql/07_rfm_segments.sql`](sql/07_rfm_segments.sql) |
 | Exports for the dashboard | BigQuery SQL | [`sql/08_exports_for_tableau.sql`](sql/08_exports_for_tableau.sql) |
 | K-means validation of RFM segments | Python (pandas, scikit-learn), Google Colab | [`notebooks/01_kmeans_segmentation.ipynb`](notebooks/01_kmeans_segmentation.ipynb) |
+| Forecast sanity check | BigQuery SQL | [`sql/09_forecast_checks.sql`](sql/09_forecast_checks.sql) |
+| Revenue forecast with backtest | Python (pandas), Google Colab | [`notebooks/02_revenue_forecast.ipynb`](notebooks/02_revenue_forecast.ipynb) |
 | Dashboard | Tableau Public | [Live dashboard](https://public.tableau.com/app/profile/sandhiya3216/viz/OnlineRetail-CustomerRetentionRevenue/CustomerRetentionRevenue) |
 
 Each SQL file starts with a one-line note saying when to run it.
@@ -147,7 +154,7 @@ Each SQL file starts with a one-line note saying when to run it.
 ### Reproduce it
 1. Download the data from [UCI](https://archive.ics.uci.edu/dataset/502/online+retail+ii) and save each Excel sheet as a CSV.
 2. In the free BigQuery sandbox, load both CSVs into a `raw` dataset with every column as text (`STRING`) and 1 header row skipped.
-3. Replace `retail-portfolio-513601` with your project ID and run the SQL files in order (01 → 08).
+3. Replace `retail-portfolio-513601` with your project ID and run the SQL files in order (01 → 09).
 
 The raw data isn't stored in this repository because of its size.
 
@@ -155,7 +162,6 @@ The raw data isn't stored in this repository because of its size.
 
 ## Future Work
 - Rebuild the SQL layers in **dbt** with automated tests and lineage documentation.
-- Add a **monthly revenue forecast** with a backtest against held-out months.
 - Analyze the **A/B test results** once the win-back campaign runs.
 
 ---
@@ -167,6 +173,7 @@ The raw data isn't stored in this repository because of its size.
 - Customers first seen in Dec 2009 may be long-time customers, because the data starts that month; they're excluded from retention comparisons.
 - Win-back rates in the impact estimate are assumptions until the test measures them.
 - Customer analysis excludes sales with no customer ID (13.1% of sales).
+- - The forecast is backtested on one 6-month window, because the data covers only two years; with more history, I'd test several windows and seasonal models.
 
 ---
 
