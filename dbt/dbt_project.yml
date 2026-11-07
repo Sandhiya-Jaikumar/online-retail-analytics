@@ -1,0 +1,22 @@
+name: 'online_retail_analytics'
+version: '1.0.0'
+profile: 'default'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Staging models are views (no storage); analytics models are tables (fast for Tableau)
+models:
+  online_retail_analytics:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: One row per order (invoice). Valid product sales only.
+    columns:
+      - name: invoice
+        description: Order number. Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Customer who placed the order. Null when the order has no customer ID (about 7% of orders).
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: order_amount_gbp
+        description: Order value in GBP (sum of valid order lines).
+        data_tests:
+          - not_null
+
+  - name: dim_customers
+    description: One row per known customer, with first/last order, cohort month, orders and sales.
+    columns:
+      - name: customer_id
+        description: Customer ID. Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: total_orders
+        description: Number of distinct orders placed by the customer.
+        data_tests:
+          - not_null
+
+  - name: monthly_sales
+    description: One row per month. Orders, customers, gross and net sales, and product cancellations.
+    columns:
+      - name: month
+        description: First day of the month. Primary key.
+        data_tests:
+          - unique
+          - not_null
