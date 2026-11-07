@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: raw
+    database: retail-portfolio-513601
+    schema: raw
+    description: Untouched copies of the two UCI Online Retail II yearly files, loaded as text.
+    tables:
+      - name: retail_2009_2010
+        description: Dec 2009 - Dec 9, 2010 (overlaps the next file for Dec 1-9, 2010)
+      - name: retail_2010_2011
+        description: Dec 1, 2010 - Dec 9, 2011
