@@ -37,6 +37,10 @@ The data was loaded into **Google BigQuery** and modeled in three layers with SQ
 
 ![Data model](images/data_model.png)
 
+**Rebuilt in dbt.** The staging and analytics layers are also built as a [dbt project](dbt/), with 10 automated tests: unique and not-null keys on every table, an orders → customers relationship test, and a custom test that fails if revenue differs between layers. Every dbt model was reconciled to the original SQL tables (1,033,036 rows · 39,289 orders · 5,848 customers · £19,195,880.05).
+
+![dbt lineage](images/dbt_lineage.png)
+
 | Layer | Table | Grain (one row per…) |
 |---|---|---|
 | Raw | `raw.retail_2009_2010`, `raw.retail_2010_2011` | Source row, unchanged |
@@ -82,7 +86,7 @@ The data was loaded into **Google BigQuery** and modeled in three layers with SQ
 - **Cancellations are small once cleaned.** Product cancellations are 1.7% of gross sales. A raw view suggested 7.4%, because fee reversals and same-day reversals were mixed in.
 - **Dec 2011 is excluded from trends**, since it has only 9 days of data.
 
-- - **Next quarter: about £1.87M (range £1.76M–£1.99M).** Sales fall to roughly half the autumn level after the November peak. I backtested three methods on six held-out months (Jun–Nov 2011): "same month last year" was most accurate (6.1% average monthly error). Adjusting for recent growth made it worse (11.1%), because a spring dip didn't carry into autumn.
+- **Next quarter: about £1.87M (range £1.76M–£1.99M).** Sales fall to roughly half the autumn level after the November peak. I backtested three methods on six held-out months (Jun–Nov 2011): "same month last year" was most accurate (6.1% average monthly error). Adjusting for recent growth made it worse (11.1%), because a spring dip didn't carry into autumn.
 - **Early check against real data:** the first 9 days of December 2011 ran 9.3% ahead of the same days in 2010 (£445k vs £407k). If December follows last year's pattern, it would land near £843k, just above the forecast range, consistent with the backtest's tendency to under-forecast. Recommendation: plan toward the high end for December.
 
 ![Forecast backtest](images/forecast_backtest.png)
@@ -105,7 +109,7 @@ The data was loaded into **Google BigQuery** and modeled in three layers with SQ
 
 - **Champions are healthy and growing:** +14% year over year among high-value Champions.
 - **Concentration risk:** top 1% of customers = 31.1% of sales; top 20% = 76.7%.
-- - **Validated with k-means clustering.** An unsupervised model, given no rules, found four natural customer groups. Five of six RFM segments map mainly to a single cluster (for example, 85% of At Risk customers fall in the "Lapsing regulars" cluster), which confirms the segmentation.
+- **Validated with k-means clustering.** An unsupervised model, given no rules, found four natural customer groups. Five of six RFM segments map mainly to a single cluster (for example, 85% of At Risk customers fall in the "Lapsing regulars" cluster), which confirms the segmentation.
 - **"Loyal" hides an early-warning group.** About half of Loyal customers cluster with lapsing regulars: 605 customers with a median of 5 orders who haven't bought in 98 days, with £1.2M in lifetime sales.
 
 ![RFM segments vs k-means clusters](images/rfm_vs_kmeans.png)
@@ -121,7 +125,7 @@ The data was loaded into **Google BigQuery** and modeled in three layers with SQ
 
 ## Recommendations
 - **Win back high-value At Risk customers (recommended).** Estimated £94k–£281k a year (10–30% of former spend). Test first: split the 324 customers randomly into two groups of 162, contact one, and compare reorder rate and sales after 90 days.
-- - **Re-engage drifting Loyal customers early.** 605 regular customers haven't ordered in about three months. Reaching them now is cheaper than winning them back once they become At Risk.
+- **Re-engage drifting Loyal customers early.** 605 regular customers haven't ordered in about three months. Reaching them now is cheaper than winning them back once they become At Risk.
 - **Rebuild new-customer acquisition (next priority).** A new customer is worth about £1,487 in their first year (upper estimate).
 - **Protect Champions** with account management to reduce concentration risk.
 - **Capture a customer ID on every order** to make about 13% of revenue trackable.
@@ -145,11 +149,14 @@ The full reasoning, options compared and risks are in the [one-page executive me
 | K-means validation of RFM segments | Python (pandas, scikit-learn), Google Colab | [`notebooks/01_kmeans_segmentation.ipynb`](notebooks/01_kmeans_segmentation.ipynb) |
 | Forecast sanity check | BigQuery SQL | [`sql/09_forecast_checks.sql`](sql/09_forecast_checks.sql) |
 | Revenue forecast with backtest | Python (pandas), Google Colab | [`notebooks/02_revenue_forecast.ipynb`](notebooks/02_revenue_forecast.ipynb) |
+| Pipeline rebuilt with automated tests and lineage | dbt (BigQuery) | [`dbt/`](dbt/) |
 | Dashboard | Tableau Public | [Live dashboard](https://public.tableau.com/app/profile/sandhiya3216/viz/OnlineRetail-CustomerRetentionRevenue/CustomerRetentionRevenue) |
 
 Each SQL file starts with a one-line note saying when to run it.
 
 **Methods:** data quality auditing and reconciliation, dimensional modeling (fact and dimension tables), cohort retention with a full cohort × month grid (so months with zero buyers count as zero), RFM segmentation using `PERCENT_RANK` (so tied customers get the same score), weighted retention rates, and scenario-based impact sizing.
+
+**Pipeline engineering:** dbt models linked with `ref()` (so dbt builds them in the right order), staging as views and analytics as tables, 10 automated data tests, and every model reconciled to the original SQL.
 
 ### Reproduce it
 1. Download the data from [UCI](https://archive.ics.uci.edu/dataset/502/online+retail+ii) and save each Excel sheet as a CSV.
@@ -161,7 +168,6 @@ The raw data isn't stored in this repository because of its size.
 ---
 
 ## Future Work
-- Rebuild the SQL layers in **dbt** with automated tests and lineage documentation.
 - Analyze the **A/B test results** once the win-back campaign runs.
 
 ---
@@ -173,7 +179,7 @@ The raw data isn't stored in this repository because of its size.
 - Customers first seen in Dec 2009 may be long-time customers, because the data starts that month; they're excluded from retention comparisons.
 - Win-back rates in the impact estimate are assumptions until the test measures them.
 - Customer analysis excludes sales with no customer ID (13.1% of sales).
-- - The forecast is backtested on one 6-month window, because the data covers only two years; with more history, I'd test several windows and seasonal models.
+- The forecast is backtested on one 6-month window, because the data covers only two years; with more history, I'd test several windows and seasonal models.
 
 ---
 
