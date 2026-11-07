@@ -73,6 +73,8 @@ Every check passed: the totals reconcile exactly, and nothing failed to convert.
 
 | Date | Step | What I did | File |
 | ----- | ----- | ----- | ----- |
+| Nov 5,2026 | V2-2 | Backtested three forecasting methods, forecast next-quarter sales, and checked the forecast against early December data | `notebooks/02_revenue_forecast.ipynb, sql/09_forecast_checks.sql` |
+| Nov 5,2026 | V2-1 | Validated RFM segments with k-means clustering in Python; found an early-warning group inside “Loyal”  | `notebooks/01_kmeans_segmentation.ipynb` |
 | Nov 4, 2026 | 10 | Wrote the one-page executive memo answering Exec Question 3: win back 324 high-value At Risk customers, £94k–£281k a year, tested with a 50/50 split  | `docs/executive_memo.pdf, docs/executive_memo.md` |
 | Nov 4, 2026 | 9 | Exported 4 tables; built and published the Tableau Public dashboard | `sql/08_exports_for_tableau.sql, exports` |
 | Nov 3, 2026 | 8 | Built RFM scores and customer segments; answered Exec Question 2  | `sql/07_rfm_segments.sql (includes opportunity sizing, Q8d - Q8e)` |
@@ -114,6 +116,12 @@ Every check passed: the totals reconcile exactly, and nothing failed to convert.
 | Revenue is highly concentrated | Top 1% \= 31.1% of sales; top 20% \= 76.7% |
 | Win-back opportunity | 324 high-value At Risk customers spent £935,383 in the previous 12 months but only £184,077 in the last 12 months. Winning back 10–30% of their former spend \= £94k–£281k a year |
 | Value of a new customer | Customers who joined in 2010 spent £1,487 each in their first 12 months on average (upper estimate) |
+| Two methods agree on the segments | 5 of 6 RFM segments map mainly to one k-means cluster; Champions 75% → Core accounts, At Risk 85% → Lapsing regulars |
+| Early-warning group inside “Loyal” | 605 Loyal customers cluster with lapsing regulars: median 5 orders, 98 days since last order, £1.2M lifetime sales |
+| Last year’s same month is the best guide | Seasonal naive: 6.1% monthly error vs 11.1% (with recent growth) and 20.8% (naive) on Jun–Nov 2011 |
+| Next quarter ≈ £1.87M | Range £1.76M–£1.99M; about half the autumn level |
+| Risk is under-planning | All three methods under-forecast the backtest; seasonal naive by 5.5% |
+| December 2011 is running ahead | Dec 1–9: £445,252 (2011) vs £407,471 (2010), \+9.3%; implies about £843k for the month if the pattern holds, above the forecast’s high end |
 
 ## 
 
@@ -135,10 +143,36 @@ Every check passed: the totals reconcile exactly, and nothing failed to convert.
 | No dashboard-wide filters | The four data sources have different levels of detail (month, cohort, customer, segment), so a shared filter would give inconsistent numbers |
 | At Risk chart shows only Champions, Loyal and At Risk | Keeps the At Risk drop visible next to healthy segments |
 | Color keys written in the titles instead of legends | Cleaner layout, with fewer boxes to read |
+| Log-transformed and standardized recency, frequency and spend before clustering | Spend had a skew of 26.6 from a few very large accounts; without the fix they would define the clusters |
+| Chose k \= 4 | The elbow bends at 4, silhouette has a local peak at 4 (0.364), and 4 groups are actionable; k \= 2 scored higher but only split active from lapsed |
+| Profiled clusters with medians | Averages would be pulled up by the largest accounts |
+| Used simple seasonal methods, not complex models | Only 24 full months (two holiday seasons); complex models would overfit |
+| Backtested on Jun–Nov 2011 before forecasting | Proves accuracy on months the method hadn’t seen |
+| Kept the simpler method over the growth-adjusted one | The growth adjustment carried a spring dip into autumn and doubled the error |
+| Range \= ±6.1% (backtest error) | An honest, explainable range for executives |
+| Checked the forecast against Dec 1–9 actuals | A quick reality check with real data, stated as an early signal, not proof |
 
-## **Interview version (30 seconds)**
+## **V2-3 dbt**
 
-> "The raw data had over a million rows and real problems: the two yearly files overlapped by nine days, 23% of sales had no customer ID, and there were cancellations, fees and adjustments mixed in with product sales. I measured every issue before cleaning, then built one cleaned view that flags each row instead of deleting it, so every exclusion is explainable. I proved it worked by reconciling the totals: the 34,335 duplicates I found matched the 34,335 rows I removed exactly. My first rule for spotting non-products wrongly caught real products, so I replaced it with a reviewed list."
+**dbt staging model check (Nov 7, 2026\)**
+
+* **What:** Rebuilt the staging view in dbt using `source()` for the two raw tables.  
+* **Check:** Compared the dbt view with the original view.  
+* **Result:** Identical: 1,033,036 rows, 1,001,485 valid sale lines, £19,195,880.05 gross sales.  
+* **Why it matters:** Proves the migration changed nothing. Same logic, now version-controlled and testable.  
+* **fct\_orders in dbt:** 39,289 orders, 2,922 with no customer ID, £19,195,880.05. Matches the original table exactly.  
+* **dim\_customers in dbt:** 5,848 customers, 72.3% repeat, 36,367 orders, £16,621,148.13 known-customer sales. Matches the original table exactly.  
+* **monthly\_sales in dbt:** 25 months, 39,289 orders, 5,848 new customers, gross £19,195,880.05, cancellations −£327,733.28, net £18,868,146.77. Matches the original table exactly.
+
+**dbt tests (10, all passing):**
+
+* unique \+ not\_null on every primary key (order, customer, month), which proves each table’s grain.  
+* Every customer ID on an order exists in dim\_customers (relationships test).  
+* A custom test fails if revenue differs between staging, fct\_orders and monthly\_sales, or doesn’t equal £19,195,880.05.  
+* **Why it matters:** checks I did by hand now run automatically on every build.  
+* 
+
+> 
 
 > 
 
