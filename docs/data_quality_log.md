@@ -17,14 +17,14 @@ This log records every data problem I found in the raw data, what I decided to d
 
 ## **Result in one minute**
 
-After cleaning, 1,003,313 lines (97.1% of clean rows) count as valid sales, worth £19.64M in gross sales.
+After cleaning, 1,001,485 lines (96.9% of clean rows) count as valid sales, worth £19.20M in gross sales.
 
 | Measure | Result |
 | ----- | ----- |
 | Raw rows loaded | 1,067,371 (matches UCI’s official count) |
 | Rows removed (overlap \+ duplicates) | 34,335 |
 | Clean rows | 1,033,036 |
-| Valid sale lines | **1001485 (96.9% of clean rows)** |
+| Valid sale lines | **1,001,485 (96.9% of clean rows)** |
 | Gross sales | £19,195,880.05 |
 | Product cancellations | −£327,733.28 (1.7% of gross sales) |
 | Net sales | £18,868,146.77 |
@@ -73,8 +73,9 @@ Every check passed: the totals reconcile exactly, and nothing failed to convert.
 
 | Date | Step | What I did | File |
 | ----- | ----- | ----- | ----- |
-| Nov 5,2026 | V2-2 | Backtested three forecasting methods, forecast next-quarter sales, and checked the forecast against early December data | `notebooks/02_revenue_forecast.ipynb, sql/09_forecast_checks.sql` |
-| Nov 5,2026 | V2-1 | Validated RFM segments with k-means clustering in Python; found an early-warning group inside “Loyal”  | `notebooks/01_kmeans_segmentation.ipynb` |
+| Nov 7, 2026 | V2-3 | Rebuilt the SQL pipeline in dbt (1 staging view, 3 mart tables) with 10 automated tests; reconciled every model to the original tables; merged to GitHub | `dbt/ (models/staging, models/marts, tests)` |
+| Nov 5, 2026 | V2-2 | Backtested three forecasting methods, forecast next-quarter sales, and checked the forecast against early December data | `notebooks/02_revenue_forecast.ipynb, sql/09_forecast_checks.sql` |
+| Nov 5, 2026 | V2-1 | Validated RFM segments with k-means clustering in Python; found an early-warning group inside “Loyal”  | `notebooks/01_kmeans_segmentation.ipynb` |
 | Nov 4, 2026 | 10 | Wrote the one-page executive memo answering Exec Question 3: win back 324 high-value At Risk customers, £94k–£281k a year, tested with a 50/50 split  | `docs/executive_memo.pdf, docs/executive_memo.md` |
 | Nov 4, 2026 | 9 | Exported 4 tables; built and published the Tableau Public dashboard | `sql/08_exports_for_tableau.sql, exports` |
 | Nov 3, 2026 | 8 | Built RFM scores and customer segments; answered Exec Question 2  | `sql/07_rfm_segments.sql (includes opportunity sizing, Q8d - Q8e)` |
@@ -104,10 +105,10 @@ Every check passed: the totals reconcile exactly, and nothing failed to convert.
 | Finding | Evidence |
 | ----- | ----- |
 | Strong seasonality | Sales peak every Oct–Nov (about £1.4M in Nov 2010 and Nov 2011): holiday restocking |
-| New customers are falling | New customers in Mar, Sep, Oct and Nov dropped from 441, 239, 375, 326 (2010) to 179, 188, 221, 191 (2011), while November sales stayed flat. The business increasingly relies on existing customers |
+| New customers are falling | New customers in Mar, Sep, Oct and Nov dropped from 442, 238, 374, 326 (2010) to 179, 188, 222, 191 (2011), while November sales stayed flat. The business increasingly relies on existing customers |
 | About 13% of revenue has no customer ID | Those orders average 77.6 lines vs 21.2, so they’re large, untracked orders |
-| Dec 2009 “new” customers are misleading | The data starts that month, so its 951 customers include long-time buyers (left-censoring) |
-| New customers are loyal | 72.8% buy again; about 20% buy in any month after joining; a bump at month 12 shows a yearly buying cycle |
+| Dec 2009 “new” customers are misleading | The data starts that month, so its 949 customers include long-time buyers (left-censoring) |
+| New customers are loyal | 72.3% buy again; about 20% buy in any month after joining; a bump at month 12 shows a yearly buying cycle |
 | Retention is stable | Jun–Aug cohorts: month-3 retention 26.5% (2010) vs 26.9% (2011) |
 | Acquisition fell sharply | New customers down 66% (Jan–May) and 49% (Jun–Aug) in 2011 vs 2010 |
 | Revenue depends on older customers | 82% of 2011 known-customer sales came from customers won before 2011; the oldest group’s sales fell about 21% per month |

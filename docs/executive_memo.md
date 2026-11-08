@@ -6,7 +6,7 @@
 The customers we win are loyal, but we are winning far fewer of them, and 324 high-value customers who used to spend £935k a year have gone quiet. A targeted win-back campaign is our fastest, lowest-cost way to grow: winning back 10–30% of their former spend is worth **£94k–£281k a year**. We should run it as a controlled test first.
 
 ## What we found
-- **Retention is stable; acquisition is not.** 73% of new customers buy again, and customers who joined in 2011 return as often as 2010 joiners (26.9% vs 26.5% at month 3). But new customers fell 49–66% in 2011 versus the same months of 2010.
+- **Retention is stable; acquisition is not.** 72% of customers buy again, and customers who joined in 2011 return as often as 2010 joiners (26.9% vs 26.5% at month 3). But new customers fell 49–66% in 2011 versus the same months of 2010.
 - **Revenue is highly concentrated.** Champions (24% of customers) bring in 69% of known-customer sales and grew 14% last year. The top 1% of customers bring in 31%.
 - **Valuable customers are slipping away.** 324 high-value At Risk customers went from £935k to £184k in yearly sales (−£751k).
 - **About 13% of revenue is invisible.** Those sales have no customer ID, so the buyers can't be tracked or won back.
