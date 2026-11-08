@@ -34,7 +34,7 @@ After cleaning, 1,003,313 lines (97.1% of clean rows) count as valid sales, wort
 
 ## **Problems found and decisions**
 
-I found 12 problems. Each one was measured before I decided how to handle it.
+I found 16 problems. Each one was measured before I decided how to handle it.
 
 | \# | Problem | What I found | Decision | Why |
 | ----- | ----- | ----- | ----- | ----- |
@@ -169,8 +169,8 @@ Every check passed: the totals reconcile exactly, and nothing failed to convert.
 * unique \+ not\_null on every primary key (order, customer, month), which proves each table’s grain.  
 * Every customer ID on an order exists in dim\_customers (relationships test).  
 * A custom test fails if revenue differs between staging, fct\_orders and monthly\_sales, or doesn’t equal £19,195,880.05.  
-* **Why it matters:** checks I did by hand now run automatically on every build.  
-* 
+* **Why it matters:** checks I did by hand now run automatically on every build.
+
 
 > 
 
