@@ -64,7 +64,8 @@ Every analysis in this project must answer one of these questions.
 
 2. **Which customers drive our revenue, and which valuable ones are slipping away?** Which segments hold the most revenue, and which high-value customers have stopped buying?  
 > *Champions (24% of customers) drive 69% of known-customer sales and grew 14% last year. Revenue is highly concentrated: the top 1% of customers bring in 31%, and the top 20% bring in 77%. The valuable customers slipping away are the At Risk segment: 710 customers who used to order about 5–6 times but haven’t bought in about a year. The high-value ones among them spent £935k the year before and only £184k in the last 12 months, a loss of about £751k a year.*  
-3. **3\. Where should we focus next quarter, and what is it worth?** One recommendation with an estimated £ impact and a way to test it.   
+
+3. Where should we focus next quarter, and what is it worth?** One recommendation with an estimated £ impact and a way to test it.   
      
 > ***Win back the 324 high-value At Risk customers.** They spent £935k in the previous 12 months but only £184k in the last 12 months. Winning back 10–30% of their former spend is worth an estimated **£94k–£281k a year**. Because the win-back rate is unknown, test it first: split the 324 customers randomly into two groups of 162, contact one group, and after 90 days compare reorder rate and sales per customer against the other group. Scale up only if the contacted group clearly outperforms. Next priorities are rebuilding new-customer acquisition (worth about £1,487 per new customer in year one) and re-engaging the 605 drifting Loyal customers before they become At Risk. Full reasoning, options and risks are in the one-page executive memo.*
 
